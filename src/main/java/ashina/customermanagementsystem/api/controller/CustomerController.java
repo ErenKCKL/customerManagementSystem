@@ -22,9 +22,15 @@ public class CustomerController {
         return ResponseEntity.ok(savedCustomer);
     }
 
-    @PutMapping("/updateCustomer")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
-        Customer updatedCustomer = customerService.updateCustomer(customer);
+    @PutMapping("/updateCustomerEmail/{id}")
+    public ResponseEntity<Customer> updateCustomerEmail(@PathVariable("id") int id, @RequestParam("newEmail") String newEmail){
+        Customer updatedCustomer = customerService.updateCustomerEmail(id, newEmail);
+        return ResponseEntity.ok(updatedCustomer);
+    }
+
+    @PutMapping("updateCustomerPassword/{id}")
+    public ResponseEntity<Customer> updateCustomerPassword(@PathVariable("id") int id, @RequestParam("newPassword") String newPassword){
+        Customer updatedCustomer = customerService.updateCustomerPassword(id, newPassword);
         return ResponseEntity.ok(updatedCustomer);
     }
 

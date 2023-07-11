@@ -27,31 +27,31 @@ public class CustomerManager implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
-        Optional<Customer> existingCustomer = customerDao.findById(customer.getId());
+    public Customer updateCustomerEmail(int id, String newEmail) {
+        Optional<Customer> existingCustomer = customerDao.findById(id);
 
-        if(existingCustomer.isPresent()){
-            Customer customerToUpdate = existingCustomer.get();
-
-            if (!customer.getEmail().equals(customerToUpdate.getEmail())){
-                customerToUpdate.setEmail(customer.getEmail());
-            }
-            if (!customer.getPassword().equals(customerToUpdate.getEmail())){
-                customerToUpdate.setPassword(customer.getPassword());
-            }
-            if (!customer.getFullName().equals(customerToUpdate.getFullName())){
-                customerToUpdate.setFullName(customer.getFullName());
-            }
-            if (!customer.getPhoneNumber().equals(customerToUpdate.getPhoneNumber())){
-                customerToUpdate.setPhoneNumber(customer.getPhoneNumber());
-            }
-
-            Customer updatedCustomer = customerDao.save(customerToUpdate);
+        if (existingCustomer.isPresent()) {
+            Customer customer = existingCustomer.get();
+            customer.setEmail(newEmail);
+            Customer updatedCustomer = customerDao.save(customer);
             return updatedCustomer;
         } else {
             throw new RuntimeException("Customer Not Found");
         }
+    }
 
+    @Override
+    public Customer updateCustomerPassword(int id, String newPassword) {
+        Optional<Customer> existingCustomer = customerDao.findById(id);
+
+        if (existingCustomer.isPresent()) {
+            Customer customer = existingCustomer.get();
+            customer.setPassword(newPassword);
+            Customer updatedCustomer = customerDao.save(customer);
+            return updatedCustomer;
+        } else {
+            throw new RuntimeException("Customer Not Found");
+        }
     }
 
     @Override

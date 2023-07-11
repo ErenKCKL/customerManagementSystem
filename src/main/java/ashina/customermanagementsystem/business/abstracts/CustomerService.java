@@ -11,7 +11,9 @@ public interface CustomerService {
 
     void deleteById(int id);
 
-    Customer updateCustomer(Customer customer);
+    Customer updateCustomerEmail(int id, String newEmail);
+
+    Customer updateCustomerPassword(int id, String newPassword);
 
     List<Customer> getAllCustomer();
     Optional<Customer> findById(int id);
