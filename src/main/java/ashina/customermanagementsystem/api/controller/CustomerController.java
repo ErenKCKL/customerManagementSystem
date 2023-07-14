@@ -1,7 +1,11 @@
 package ashina.customermanagementsystem.api.controller;
 
 import ashina.customermanagementsystem.business.abstracts.CustomerService;
+import ashina.customermanagementsystem.business.abstracts.LoginService;
 import ashina.customermanagementsystem.entities.concretes.Customer;
+import ashina.customermanagementsystem.entities.concretes.LoginRequest;
+import ashina.customermanagementsystem.entities.concretes.LoginResponse;
+import ashina.customermanagementsystem.entities.concretes.SessionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,18 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private SessionHelper sessionHelper;
+
+    @Autowired
+    private LoginService loginService;
+
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = loginService.login(request);
+        return ResponseEntity.ok(response);
+    }
     @PostMapping("/registerNewCustomer")
     public ResponseEntity<Customer> registerNewCustomer(@RequestBody Customer customer){
         Customer savedCustomer = customerService.registerNewCustomer(customer);
