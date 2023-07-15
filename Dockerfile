@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk
 
 WORKDIR /app
-COPY ./target/customerManagementSystem-0.0.1-SNAPSHOT.jar customerManagementSystem.jar
+COPY target/customerManagementSystem-0.0.1-SNAPSHOT.jar customerManagementSystem.jar
 
 EXPOSE 8080
 
