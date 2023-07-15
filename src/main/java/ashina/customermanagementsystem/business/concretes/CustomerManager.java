@@ -3,7 +3,10 @@ package ashina.customermanagementsystem.business.concretes;
 import ashina.customermanagementsystem.business.abstracts.CustomerService;
 import ashina.customermanagementsystem.dataAccess.abstracts.CustomerDao;
 import ashina.customermanagementsystem.entities.concretes.Customer;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +18,13 @@ public class CustomerManager implements CustomerService {
     @Autowired
     private CustomerDao customerDao;
 
+    @Resource
+    @Qualifier("passwordEncoder")
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Customer registerNewCustomer(Customer customer) {
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerDao.save(customer);
     }
 
