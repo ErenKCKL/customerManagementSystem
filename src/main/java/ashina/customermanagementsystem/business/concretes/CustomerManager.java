@@ -10,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerManager implements CustomerService {
@@ -74,6 +76,12 @@ public class CustomerManager implements CustomerService {
     @Override
     public Optional<Customer> findByEmail(String email) {
         return customerDao.findByEmail(email);
+    }
+
+    @Override
+    public List<String> getAllEmails() {
+        List<Customer> customers = customerDao.findAll();
+        return customers.stream().map(Customer::getEmail).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     @Override

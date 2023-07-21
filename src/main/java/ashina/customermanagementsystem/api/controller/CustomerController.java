@@ -6,13 +6,16 @@ import ashina.customermanagementsystem.entities.concretes.Customer;
 import ashina.customermanagementsystem.entities.concretes.LoginRequest;
 import ashina.customermanagementsystem.entities.concretes.LoginResponse;
 import ashina.customermanagementsystem.entities.concretes.SessionHelper;
+import ashina.customermanagementsystem.error.ApiError;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import java.util.*;
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin
@@ -33,10 +36,24 @@ public class CustomerController {
         LoginResponse response = loginService.login(request);
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/registerNewCustomer")
-    public ResponseEntity<Customer> registerNewCustomer(@RequestBody Customer customer){
+    public ResponseEntity<Customer> registerNewCustomer(@Valid  @RequestBody Customer customer){
         Customer savedCustomer = customerService.registerNewCustomer(customer);
         return ResponseEntity.ok(savedCustomer);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleValidationException(MethodArgumentNotValidException exception) {
+        ApiError error = new ApiError(400, "Validation Error", "/api/customers");
+
+        Map<String, String> validationErrors = new HashMap<>();
+        for (FieldError fieldError: exception.getBindingResult().getFieldErrors()){
+            validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        error.setValidationErrors(validationErrors);
+        return error;
     }
 
     @PutMapping("/updateCustomerEmail/{id}")
@@ -65,6 +82,11 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
+    @GetMapping("/getAllEmails")
+    public ResponseEntity<List<String>> getAllEmail() {
+        List<String> emails  = customerService.getAllEmails();
+        return ResponseEntity.ok(emails);
+    }
 
 
 

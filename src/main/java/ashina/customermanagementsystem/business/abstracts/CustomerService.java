@@ -20,5 +20,8 @@ public interface CustomerService {
 
     Optional<Customer> findByEmail(String email);
 
+    List<String> getAllEmails();
+
+
     boolean existsByEmail(String email);
 }
